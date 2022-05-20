@@ -10,6 +10,17 @@
 	8. DISTINCT
 	9. ORDER BY	(Can use aliases, last to be executed in query)
 
+-- SQL ACID --
+/* 
+	- Atomicity: The atomicity acid property in SQL. It means either all the operations (insert, update, delete) inside a transaction take place or none. Or you can say, all the statements (insert, update, delete) inside a transaction are either completed or rolled back.
+	- Consistency: This SQL ACID property ensures database consistency. It means, whatever happens in the middle of the transaction, this acid property will never leave your database in a half-completed state. 
+		* If the transaction completed successfully, then it will apply all the changes to the database.
+		* If there is an error in a transaction, then all the changes that already made will be rolled back automatically. It means the database will restore to its state that it had before the transaction started.
+		* If there is a system failure in the middle of the transaction, then also, all the changes made already will automatically rollback. 
+	- Isolation: Every transaction is individual, and One transaction can’t access the result of other transactions until the transaction completed. Or, you can’t perform the same operation using multiple transactions at the same time. We will explain this SQL acid property in a separate article.
+	- Durability: Once the transaction completed, then the changes it has made to the database will be permanent. Even if there is a system failure, or any abnormal changes also, this property will safeguard the committed data.
+*/
+
 -- Most Commonly Used SQL Statements
 
 -- Create Database --
@@ -104,7 +115,31 @@
 	GO
 
 -- User Defined Functions --
+/* 
+	- User-defined scalar functions – cover the user-defined scalar functions that allow you to encapsulate complex formula or business logic and reuse them in every query.
+	- Table variables – learn how to use table variables as a return value of user-defined functions.
+	- Table-valued functions – introduce you to inline table-valued function and multi-statement table-valued function to develop user-defined functions that return data of table types.
+	- Removing user-defined functions – learn how to drop one or more existing user-defined functions from the database.
 
+*/
+-- CREATE USER DEFINED FUNCTION --
+	CREATE FUNCTION [database_name.]function_name (parameters)
+	RETURNS data_type AS
+	BEGIN
+		SQL statements
+		RETURN value
+	END;
+
+-- ALTER USER DEFINED FUNCTION --
+	ALTER FUNCTION [database_name.]function_name (parameters)
+	RETURNS data_type AS
+	BEGIN
+		SQL statements
+		RETURN value
+	END;
+
+-- DROP USER DEFINED FUNCTION --
+	DROP FUNCTION [database_name.]function_name;
 
 -- Indexes --
 /* Indexes are special data structures associated with tables or views that help speed up the query. 
@@ -127,3 +162,22 @@
 */
 	CREATE [NONCLUSTERED] INDEX index_name
 	ON table_name(column_list);
+
+
+-- Rank Functions --
+
+ --SYNTAX--
+		 SELECT columnnames,
+		 * ROW_NUMBER() OVER (ORDER BY column) AS alias,
+		 * RANK() OVER (ORDER BY column) AS alias,
+		 * DENSE_RANK() OVER (ORDER BY column) AS alias,
+		 * NTILE(N) OVER (ORDER BY column) AS alias,
+		 FROM tablename
+ /* 
+	ROW_NUMBER() - We use ROW_Number() SQL RANK function to get a unique sequential number for each row in the specified data. It gives the rank one for the first row and then increments the value by one for each row. 
+	RANK() - We use RANK() SQL Rank function to specify rank for each row in the result set
+	DENSE_RANK() - We use DENSE_RANK() function to specify a unique rank number within the partition as per the specified column value. It is similar to the Rank function with a small difference.
+	               In the SQL RANK function DENSE_RANK(), if we have duplicate values, SQL assigns different ranks to those rows as well. Ideally, we should get the same rank for duplicate or similar values.
+	NTILE() - We use the NTILE(N) function to distribute the number of rows in the specified (N) number of groups. Each row group gets its rank as per the specified condition. We need to specify the value for the desired number of groups.
+
+ */
